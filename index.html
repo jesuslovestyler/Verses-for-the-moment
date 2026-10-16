@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Verses for the Moment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #faf4e8;
+        --bg-deep: #f3ead7;
+        --surface: #fffdf7;
+        --ink: #3e3423;
+        --ink-soft: #5d5040;
+        --muted: #8a7a5f;
+        --accent: #a5762a;
+        --accent-strong: #8a5f1d;
+        --accent-soft: #f4e8cd;
+        --line: #e6d9bf;
+        --card-shadow: 0 10px 30px rgba(120, 90, 30, 0.13), 0 2px 6px rgba(120, 90, 30, 0.08);
+        --btn-shadow: 0 2px 8px rgba(120, 90, 30, 0.1);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1e1913;
+          --bg-deep: #171310;
+          --surface: #2a231b;
+          --ink: #f0e6d2;
+          --ink-soft: #d8c9ab;
+          --muted: #a8946f;
+          --accent: #d9ab54;
+          --accent-strong: #eac37c;
+          --accent-soft: #3b2f1d;
+          --line: #463a29;
+          --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+          --btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+        }
+      }
+
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+        background-attachment: fixed;
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.55;
+        min-height: 100vh;
+      }
+
+      .wrap {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: max(20px, env(safe-area-inset-top)) 18px calc(28px + env(safe-area-inset-bottom));
+      }
+
+      /* ---------- Intro ---------- */
+      .intro { text-align: center; padding: 14px 4px 4px; }
+      .intro h1 {
+        font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+        font-weight: 600;
+        font-size: clamp(1.9rem, 7.5vw, 2.6rem);
+        line-height: 1.15;
+        margin: 0 0 10px;
+        letter-spacing: 0.01em;
+      }
+      .intro p {
+        margin: 0 auto;
+        max-width: 34em;
+        color: var(--ink-soft);
+        font-size: 1.02rem;
+      }
+      .how {
+        margin: 16px auto 0;
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px 10px;
+        color: var(--muted);
+        font-size: 0.86rem;
+        letter-spacing: 0.02em;
+      }
+      .how .dot { color: var(--accent); font-weight: 700; }
+      .rule {
+        width: 54px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--accent);
+        opacity: 0.55;
+        margin: 20px auto 4px;
+      }
+
+      /* ---------- Topic grid ---------- */
+      .topics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      @media (min-width: 560px) {
+        .topics { grid-template-columns: repeat(3, 1fr); }
+      }
+      @media (min-width: 900px) {
+        .wrap { max-width: 880px; }
+        .topics { grid-template-columns: repeat(5, 1fr); }
+      }
+      .topic-btn {
+        appearance: none;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 14px;
+        box-shadow: var(--btn-shadow);
+        padding: 14px 10px 12px;
+        min-height: 86px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        font: inherit;
+        font-size: 0.98rem;
+        font-weight: 600;
+        line-height: 1.25;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .topic-btn svg {
+        width: 24px;
+        height: 24px;
+        stroke: var(--accent);
+        fill: none;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex: none;
+      }
+      .topic-btn:active { transform: scale(0.97); }
+      .topic-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+      .topic-btn.active {
+        background: var(--accent-soft);
+        border-color: var(--accent);
+        color: var(--accent-strong);
+      }
+      .topic-btn.active svg { stroke: var(--accent-strong); }
+
+      /* ---------- Verse card ---------- */
+      .verse-zone { margin-top: 22px; }
+      .verse-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--card-shadow);
+        padding: 30px 24px 26px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .verse-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: var(--accent);
+        opacity: 0.75;
+      }
+      .verse-topic {
+        margin: 0 0 14px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .verse-text {
+        font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+        font-size: clamp(1.45rem, 5.6vw, 1.8rem);
+        line-height: 1.45;
+        font-weight: 500;
+        margin: 0;
+        color: var(--ink);
+        transition: opacity 0.22s ease;
+      }
+      .verse-text.fading { opacity: 0; }
+      .verse-ref {
+        margin: 18px 0 0;
+        font-family: "EB Garamond", Georgia, serif;
+        font-style: italic;
+        font-size: 1.08rem;
+        color: var(--muted);
+        transition: opacity 0.22s ease;
+      }
+      .verse-ref.fading { opacity: 0; }
+      .verse-empty {
+        font-family: "EB Garamond", Georgia, serif;
+        font-size: 1.3rem;
+        font-style: italic;
+        color: var(--muted);
+        margin: 6px 0 2px;
+        line-height: 1.5;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .actions[hidden] { display: none; }
+      .action-btn {
+        appearance: none;
+        flex: 1 1 0;
+        border-radius: 14px;
+        padding: 15px 10px;
+        font: inherit;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        min-height: 54px;
+        transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .action-btn:active { transform: scale(0.98); }
+      .action-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+      .btn-another {
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        color: #fffaf0;
+      }
+      @media (prefers-color-scheme: dark) {
+        .btn-another { color: #241a08; }
+      }
+      .btn-copy {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        color: var(--ink);
+        box-shadow: var(--btn-shadow);
+      }
+      .btn-copy.copied {
+        background: var(--accent-soft);
+        border-color: var(--accent);
+        color: var(--accent-strong);
+      }
+
+      footer {
+        margin-top: 30px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      footer .rule { margin: 0 auto 14px; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .verse-text, .verse-ref, .topic-btn, .action-btn { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="intro">
+        <h1>What are you carrying today?</h1>
+        <p>
+          Whatever has come with you through the door — the worry that woke you,
+          the grief that won&rsquo;t lift, the quiet hope you&rsquo;re holding onto —
+          there is a word from the Lord for it. Day or night, pick what fits,
+          and sit with the verse a while.
+        </p>
+        <p class="how">
+          <span>Pick a topic</span><span class="dot" aria-hidden="true">&middot;</span>
+          <span>Receive a verse</span><span class="dot" aria-hidden="true">&middot;</span>
+          <span>Copy it to share</span>
+        </p>
+        <div class="rule" aria-hidden="true"></div>
+      </section>
+
+      <nav class="topics" id="topics" aria-label="Choose what you are carrying"></nav>
+
+      <section class="verse-zone">
+        <div class="verse-card" id="verseCard" aria-live="polite">
+          <p class="verse-empty" id="verseEmpty">
+            Choose what you&rsquo;re carrying above,<br />and a verse will meet you here.
+          </p>
+          <p class="verse-topic" id="verseTopic" hidden></p>
+          <p class="verse-text" id="verseText" hidden></p>
+          <p class="verse-ref" id="verseRef" hidden></p>
+        </div>
+        <div class="actions" id="actions" hidden>
+          <button type="button" class="action-btn btn-another" id="btnAnother">Show me another verse</button>
+          <button type="button" class="action-btn btn-copy" id="btnCopy">Copy verse</button>
+        </div>
+      </section>
+
+      <footer>
+        <div class="rule" aria-hidden="true"></div>
+        <p>World English Bible (WEB) &mdash; public domain. Share freely.</p>
+      </footer>
+    </main>
+
+    <script>
+      "use strict";
+
+      var TOPICS = [
+        {
+          id: "anxiety",
+          name: "Anxiety & Worry",
+          label: "For anxiety & worry",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9c2.5 0 2.5 2.4 5 2.4S9.5 9 12 9s2.5 2.4 5 2.4S19.5 9 22 9"/><path d="M2 15c2.5 0 2.5 2.4 5 2.4S9.5 15 12 15s2.5 2.4 5 2.4S19.5 15 22 15"/></svg>',
+          verses: [
+            { ref: "Philippians 4:6-7", text: "In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God. And the peace of God, which surpasses all understanding, will guard your hearts and your thoughts in Christ Jesus." },
+            { ref: "Matthew 6:34", text: "Therefore don\u2019t be anxious for tomorrow, for tomorrow will be anxious for itself. Each day\u2019s own evil is sufficient." },
+            { ref: "1 Peter 5:7", text: "casting all your worries on him, because he cares for you." },
+            { ref: "Psalm 55:22", text: "Cast your burden on Yahweh, and he will sustain you. He will never allow the righteous to be moved." },
+            { ref: "John 14:27", text: "Peace I leave with you. My peace I give to you; not as the world gives, give I to you. Don\u2019t let your heart be troubled, neither let it be fearful." },
+            { ref: "Isaiah 26:3", text: "You will keep whoever\u2019s mind is steadfast in perfect peace, because he trusts in you." },
+            { ref: "Psalm 94:19", text: "In the multitude of my thoughts within me, your comforts delight my soul." },
+            { ref: "Matthew 6:25", text: "Therefore I tell you, don\u2019t be anxious for your life: what you will eat, or what you will drink; nor yet for your body, what you will wear. Isn\u2019t life more than food, and the body more than clothing?" }
+          ]
+        },
+        {
+          id: "fear",
+          name: "Fear",
+          label: "For fear",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 2.6v5.2c0 4.6-3 8-7 9.7-4-1.7-7-5.1-7-9.7V5.6L12 3z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg>',
+          verses: [
+            { ref: "Isaiah 41:10", text: "Don\u2019t you be afraid, for I am with you. Don\u2019t be dismayed, for I am your God. I will strengthen you. Yes, I will help you. Yes, I will uphold you with the right hand of my righteousness." },
+            { ref: "2 Timothy 1:7", text: "For God didn\u2019t give us a spirit of fear, but of power, love, and self-control." },
+            { ref: "Psalm 56:3", text: "When I am afraid, I will put my trust in you." },
+            { ref: "Joshua 1:9", text: "Haven\u2019t I commanded you? Be strong and courageous. Don\u2019t be afraid. Don\u2019t be dismayed, for Yahweh your God is with you wherever you go." },
+            { ref: "Psalm 27:1", text: "Yahweh is my light and my salvation. Whom shall I fear? Yahweh is the strength of my life. Of whom shall I be afraid?" },
+            { ref: "Deuteronomy 31:8", text: "Yahweh himself is who goes before you. He will be with you. He will not fail you nor forsake you. Don\u2019t be afraid. Don\u2019t be discouraged." },
+            { ref: "Psalm 46:1-2", text: "God is our refuge and strength, a very present help in trouble. Therefore we won\u2019t be afraid, though the earth changes, though the mountains are shaken into the heart of the seas;" },
+            { ref: "Isaiah 43:1", text: "But now Yahweh who created you, Jacob, and he who formed you, Israel says: Don\u2019t be afraid, for I have redeemed you. I have called you by your name. You are mine." },
+            { ref: "Psalm 23:4", text: "Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me. Your rod and your staff, they comfort me." }
+          ]
+        },
+        {
+          id: "grief",
+          name: "Grief & Loss",
+          label: "For grief & loss",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5C7 16.5 3.5 13.3 3.5 9.6 3.5 7 5.4 5 7.8 5c1.7 0 3.2.9 4.2 2.3C13 5.9 14.5 5 16.2 5c2.4 0 4.3 2 4.3 4.6 0 3.7-3.5 6.9-8.5 10.9z"/></svg>',
+          verses: [
+            { ref: "Psalm 34:18", text: "Yahweh is near to those who have a broken heart, and saves those who have a crushed spirit." },
+            { ref: "Matthew 5:4", text: "Blessed are those who mourn, for they shall be comforted." },
+            { ref: "Revelation 21:4", text: "He will wipe away every tear from their eyes. Death will be no more; neither will there be mourning, nor crying, nor pain, any more. The first things have passed away." },
+            { ref: "John 11:25-26", text: "Jesus said to her, I am the resurrection and the life. He who believes in me will still live, even if he dies. Whoever lives and believes in me will never die. Do you believe this?" },
+            { ref: "1 Thessalonians 4:13-14", text: "But we don\u2019t want you to be ignorant, brothers, concerning those who have fallen asleep, so that you don\u2019t grieve like the rest, who have no hope. For if we believe that Jesus died and rose again, even so God will bring with him those who have fallen asleep in Jesus." },
+            { ref: "Psalm 147:3", text: "He heals the broken in heart, and binds up their wounds." },
+            { ref: "Isaiah 61:3", text: "to provide for those who mourn in Zion, to give to them a garland for ashes, the oil of joy for mourning, the garment of praise for the spirit of heaviness; that they may be called trees of righteousness, the planting of Yahweh, that he may be glorified." },
+            { ref: "Lamentations 3:22-23", text: "It is because of Yahweh\u2019s loving kindnesses that we are not consumed, because his compassion doesn\u2019t fail. They are new every morning. Great is your faithfulness." },
+            { ref: "2 Corinthians 1:3-4", text: "Blessed be the God and Father of our Lord Jesus Christ, the Father of mercies and God of all comfort; who comforts us in all our affliction, that we may be able to comfort those who are in any affliction, through the comfort with which we ourselves are comforted by God." },
+            { ref: "Psalm 73:26", text: "My flesh and my heart fails, but God is the strength of my heart and my portion forever." }
+          ]
+        },
+        {
+          id: "weariness",
+          name: "Weariness & Rest",
+          label: "For weariness & rest",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13.5A8.5 8.5 0 1 1 10.5 4a7 7 0 0 0 9.5 9.5z"/></svg>',
+          verses: [
+            { ref: "Matthew 11:28-30", text: "Come to me, all you who labor and are heavily burdened, and I will give you rest. Take my yoke upon you, and learn from me, for I am gentle and humble in heart; and you will find rest for your souls. For my yoke is easy, and my burden is light." },
+            { ref: "Isaiah 40:31", text: "But those who wait for Yahweh will renew their strength. They will mount up with wings like eagles. They will run, and not be weary. They will walk, and not faint." },
+            { ref: "Isaiah 40:29", text: "He gives power to the weak. He increases the strength of him who has no might." },
+            { ref: "Exodus 33:14", text: "He said, My presence will go with you, and I will give you rest." },
+            { ref: "Psalm 23:1-3", text: "Yahweh is my shepherd: I shall lack nothing. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul. He guides me in the paths of righteousness for his name\u2019s sake." },
+            { ref: "Galatians 6:9", text: "Let us not be weary in doing good, for we will reap in due season, if we don\u2019t give up." },
+            { ref: "Hebrews 4:9-10", text: "There remains therefore a Sabbath rest for the people of God. For he who has entered into his rest has himself also rested from his works, as God did from his." },
+            { ref: "Psalm 127:2", text: "It is vain for you to rise up early, to stay up late, eating the bread of toil; for he gives sleep to his loved ones." },
+            { ref: "Jeremiah 31:25", text: "For I have satiated the weary soul, and I have replenished every sorrowful soul." },
+            { ref: "Psalm 62:5", text: "My soul, wait in silence for God alone, for my expectation is from him." }
+          ]
+        },
+        {
+          id: "loneliness",
+          name: "Loneliness",
+          label: "For loneliness",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c1.8 2.3 3 4.3 3 6.3a3 3 0 1 1-6 0c0-2 1.2-4 3-6.3z"/><path d="M5 20.5h14"/></svg>',
+          verses: [
+            { ref: "Deuteronomy 31:6", text: "Be strong and courageous. Don\u2019t be afraid or scared of them; for Yahweh your God himself is who goes with you. He will not fail you nor forsake you." },
+            { ref: "Hebrews 13:5", text: "Be free from the love of money, content with such things as you have, for he has said, I will in no way leave you, neither will I in any way forsake you." },
+            { ref: "Psalm 27:10", text: "When my father and my mother forsake me, then Yahweh will take me up." },
+            { ref: "John 14:18", text: "I will not leave you orphans. I will come to you." },
+            { ref: "Psalm 68:6", text: "God sets the lonely in families. He brings out the prisoners with singing, but the rebellious dwell in a sun-scorched land." },
+            { ref: "Isaiah 49:15-16", text: "Can a woman forget her nursing child, that she should not have compassion on the son of her womb? Yes, these may forget, yet I will not forget you! Behold, I have engraved you on the palms of my hands. your walls are continually before me." },
+            { ref: "Matthew 28:20", text: "teaching them to observe all things that I commanded you. Behold, I am with you always, even to the end of the age. Amen." },
+            { ref: "Psalm 139:7-8", text: "Where could I go from your Spirit? Or where could I flee from your presence? If I ascend up into heaven, you are there. If I make my bed in Sheol, behold, you are there!" },
+            { ref: "Psalm 145:18", text: "Yahweh is near to all those who call on him, to all who call on him in truth." }
+          ]
+        },
+        {
+          id: "temptation",
+          name: "Temptation",
+          label: "For temptation",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5V10L12 3.5 20 10v10.5"/><path d="M9.5 20.5v-6h5v6"/></svg>',
+          verses: [
+            { ref: "1 Corinthians 10:13", text: "No temptation has taken you except what is common to man. God is faithful, who will not allow you to be tempted above what you are able, but will with the temptation also make the way of escape, that you may be able to endure it." },
+            { ref: "James 1:12", text: "Blessed is the man who endures temptation, for when he has been approved, he will receive the crown of life, which the Lord promised to those who love him." },
+            { ref: "Hebrews 4:15-16", text: "For we don\u2019t have a high priest who can\u2019t be touched with the feeling of our infirmities, but one who has been in all points tempted like we are, yet without sin. Let us therefore draw near with boldness to the throne of grace, that we may receive mercy, and may find grace for help in time of need." },
+            { ref: "Psalm 119:11", text: "I have hidden your word in my heart, that I might not sin against you." },
+            { ref: "James 4:7", text: "Be subject therefore to God. Resist the devil, and he will flee from you." },
+            { ref: "Matthew 26:41", text: "Watch and pray, that you don\u2019t enter into temptation. The spirit indeed is willing, but the flesh is weak." },
+            { ref: "2 Peter 2:9", text: "the Lord knows how to deliver the godly out of temptation and to keep the unrighteous under punishment for the day of judgment;" },
+            { ref: "Hebrews 2:18", text: "For in that he himself has suffered being tempted, he is able to help those who are tempted." },
+            { ref: "Psalm 51:10", text: "Create in me a clean heart, O God. Renew a right spirit within me." }
+          ]
+        },
+        {
+          id: "forgiveness",
+          name: "Forgiveness",
+          label: "For forgiveness",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15c5 1 9-1.5 11-6l5-4-1.5 5.5C17 16 12 19 6.5 18.5L4 15z"/><path d="M4 15c-1 2.5-1 4.5 0 6"/></svg>',
+          verses: [
+            { ref: "1 John 1:9", text: "If we confess our sins, he is faithful and righteous to forgive us the sins, and to cleanse us from all unrighteousness." },
+            { ref: "Psalm 103:12", text: "As far as the east is from the west, so far has he removed our transgressions from us." },
+            { ref: "Isaiah 1:18", text: "Come now, and let us reason together, says Yahweh: Though your sins be as scarlet, they shall be as white as snow. Though they be red like crimson, they shall be as wool." },
+            { ref: "Micah 7:18-19", text: "Who is a God like you, who pardons iniquity, and passes over the disobedience of the remnant of his heritage? He doesn\u2019t retain his anger forever, because he delights in loving kindness. He will again have compassion on us. He will tread our iniquities under foot; and you will cast all their sins into the depths of the sea." },
+            { ref: "Ephesians 1:7", text: "in whom we have our redemption through his blood, the forgiveness of our trespasses, according to the riches of his grace," },
+            { ref: "Colossians 1:13-14", text: "who delivered us out of the power of darkness, and translated us into the Kingdom of the Son of his love; in whom we have our redemption, the forgiveness of our sins;" },
+            { ref: "Psalm 32:1-2", text: "Blessed is he whose disobedience is forgiven, whose sin is covered. Blessed is the man to whom Yahweh doesn\u2019t impute iniquity, in whose spirit there is no deceit." },
+            { ref: "Isaiah 43:25", text: "I, even I, am he who blots out your transgressions for my own sake; and I will not remember your sins." },
+            { ref: "Acts 3:19", text: "Repent therefore, and turn again, that your sins may be blotted out, so that there may come times of refreshing from the presence of the Lord," }
+          ]
+        },
+        {
+          id: "gratitude",
+          name: "Gratitude & Praise",
+          label: "For gratitude & praise",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>',
+          verses: [
+            { ref: "Psalm 100:4-5", text: "Enter into his gates with thanksgiving, into his courts with praise. Give thanks to him, and bless his name. For Yahweh is good. His loving kindness endures forever, his faithfulness to all generations." },
+            { ref: "1 Thessalonians 5:18", text: "In everything give thanks, for this is the will of God in Christ Jesus toward you." },
+            { ref: "Psalm 118:24", text: "This is the day that Yahweh has made. We will rejoice and be glad in it!" },
+            { ref: "Psalm 103:1-2", text: "Praise Yahweh, my soul! All that is within me, praise his holy name! Praise Yahweh, my soul, and don\u2019t forget all his benefits;" },
+            { ref: "Colossians 3:17", text: "Whatever you do, in word or in deed, do all in the name of the Lord Jesus, giving thanks to God the Father, through him." },
+            { ref: "Psalm 107:1", text: "Give thanks to Yahweh, for he is good, for his loving kindness endures forever." },
+            { ref: "Psalm 95:2-3", text: "Let\u2019s come before his presence with thanksgiving. Let\u2019s extol him with songs! For Yahweh is a great God, a great King above all gods." },
+            { ref: "James 1:17", text: "Every good gift and every perfect gift is from above, coming down from the Father of lights, with whom can be no variation, nor turning shadow." },
+            { ref: "Psalm 34:1", text: "I will bless Yahweh at all times. His praise will always be in my mouth." }
+          ]
+        },
+        {
+          id: "joy",
+          name: "Joy",
+          label: "For joy",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17a7 7 0 0 1 14 0"/><path d="M12 5.5V3M4.9 8.5L3.5 7M19.1 8.5L20.5 7"/><path d="M2.5 20.5h19"/></svg>',
+          verses: [
+            { ref: "Nehemiah 8:10", text: "Then he said to them, Go your way. Eat the fat, drink the sweet, and send portions to him for whom nothing is prepared, for today is holy to our Lord. Don\u2019t be grieved, for the joy of Yahweh is your strength." },
+            { ref: "John 15:11", text: "I have spoken these things to you, that my joy may remain in you, and that your joy may be made full." },
+            { ref: "Psalm 16:11", text: "You will show me the path of life. In your presence is fullness of joy. In your right hand there are pleasures forever more." },
+            { ref: "Philippians 4:4", text: "Rejoice in the Lord always! Again I will say, Rejoice!" },
+            { ref: "Psalm 30:5", text: "For his anger is but for a moment. His favor is for a lifetime. Weeping may stay for the night, but joy comes in the morning." },
+            { ref: "Romans 15:13", text: "Now may the God of hope fill you with all joy and peace in believing, that you may abound in hope, in the power of the Holy Spirit." },
+            { ref: "Isaiah 12:3", text: "Therefore with joy you will draw water out of the wells of salvation." },
+            { ref: "John 16:22", text: "Therefore you now have sorrow, but I will see you again, and your heart will rejoice, and no one will take your joy away from you." },
+            { ref: "Psalm 126:5-6", text: "Those who sow in tears will reap in joy. He who goes out weeping, carrying seed for sowing, will certainly come again with joy, carrying his sheaves." }
+          ]
+        },
+        {
+          id: "hope",
+          name: "Hope",
+          label: "For hope",
+          icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v13"/><circle cx="12" cy="5.5" r="1.6"/><path d="M5.5 13.5H3c0 4.5 4 8 9 8s9-3.5 9-8h-2.5"/><path d="M8 10.5h8"/></svg>',
+          verses: [
+            { ref: "Jeremiah 29:11", text: "For I know the thoughts that I think toward you, says Yahweh, thoughts of peace, and not of evil, to give you hope and a future." },
+            { ref: "Hebrews 6:19", text: "This hope we have as an anchor of the soul, a hope both sure and steadfast and entering into that which is within the veil;" },
+            { ref: "Psalm 42:11", text: "Why are you in despair, my soul? Why are you disturbed within me? Hope in God! For I shall still praise him, the saving help of my countenance, and my God." },
+            { ref: "Romans 5:4-5", text: "and perseverance, proven character; and proven character, hope: and hope doesn\u2019t disappoint us, because God\u2019s love has been poured out into our hearts through the Holy Spirit who was given to us." },
+            { ref: "1 Peter 1:3", text: "Blessed be the God and Father of our Lord Jesus Christ, who according to his great mercy caused us to be born again to a living hope through the resurrection of Jesus Christ from the dead," },
+            { ref: "Psalm 130:5", text: "I wait for Yahweh. My soul waits. I hope in his word." },
+            { ref: "Titus 2:13", text: "looking for the blessed hope and appearing of the glory of our great God and Savior, Jesus Christ;" },
+            { ref: "Psalm 71:14", text: "But I will always hope, and will add to all of your praise." },
+            { ref: "Lamentations 3:24-26", text: "Yahweh is my portion, says my soul. Therefore I will hope in him. Yahweh is good to those who wait for him, to the soul who seeks him. It is good that a man should hope and quietly wait for the salvation of Yahweh." }
+          ]
+        }
+      ];
+
+      var topicsEl = document.getElementById("topics");
+      var cardEl = document.getElementById("verseCard");
+      var emptyEl = document.getElementById("verseEmpty");
+      var topicEl = document.getElementById("verseTopic");
+      var textEl = document.getElementById("verseText");
+      var refEl = document.getElementById("verseRef");
+      var actionsEl = document.getElementById("actions");
+      var btnAnother = document.getElementById("btnAnother");
+      var btnCopy = document.getElementById("btnCopy");
+
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Per-topic draw state: a shuffled deck of verse indexes, drawn without
+      // repeating until the whole bank has been shown.
+      var decks = {};
+      var current = null; // { topic, verse }
+
+      function shuffledIndexes(n, avoidFirst) {
+        var arr = [];
+        for (var i = 0; i < n; i++) arr.push(i);
+        for (var j = n - 1; j > 0; j--) {
+          var k = Math.floor(Math.random() * (j + 1));
+          var tmp = arr[j]; arr[j] = arr[k]; arr[k] = tmp;
+        }
+        if (n > 1 && avoidFirst !== null && arr[0] === avoidFirst) {
+          var t = arr[0]; arr[0] = arr[1]; arr[1] = t;
+        }
+        return arr;
+      }
+
+      function drawVerse(topic) {
+        var deck = decks[topic.id];
+        if (!deck || deck.pos >= deck.order.length) {
+          var avoid = deck && deck.last !== undefined ? deck.last : null;
+          deck = { order: shuffledIndexes(topic.verses.length, avoid), pos: 0, last: avoid };
+          decks[topic.id] = deck;
+        }
+        var idx = deck.order[deck.pos];
+        deck.pos += 1;
+        deck.last = idx;
+        return topic.verses[idx];
+      }
+
+      function render(verse, topic, animate) {
+        function apply() {
+          topicEl.textContent = topic.label;
+          textEl.textContent = "\u201C" + verse.text + "\u201D";
+          refEl.textContent = "\u2014 " + verse.ref + " (WEB)";
+          textEl.classList.remove("fading");
+          refEl.classList.remove("fading");
+        }
+        if (animate && !reduceMotion && !textEl.hidden) {
+          textEl.classList.add("fading");
+          refEl.classList.add("fading");
+          setTimeout(apply, 180);
+        } else {
+          apply();
+        }
+      }
+
+      function selectTopic(topic, scroll) {
+        current = { topic: topic, verse: drawVerse(topic) };
+        var buttons = topicsEl.querySelectorAll(".topic-btn");
+        for (var i = 0; i < buttons.length; i++) {
+          var isActive = buttons[i].getAttribute("data-topic") === topic.id;
+          buttons[i].classList.toggle("active", isActive);
+          buttons[i].setAttribute("aria-pressed", isActive ? "true" : "false");
+        }
+        emptyEl.hidden = true;
+        topicEl.hidden = false;
+        textEl.hidden = false;
+        refEl.hidden = false;
+        actionsEl.hidden = false;
+        render(current.verse, topic, true);
+        if (scroll) {
+          setTimeout(function () {
+            cardEl.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" });
+          }, 60);
+        }
+      }
+
+      TOPICS.forEach(function (topic) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "topic-btn";
+        btn.setAttribute("data-topic", topic.id);
+        btn.setAttribute("aria-pressed", "false");
+        btn.innerHTML = topic.icon + "<span>" + topic.name + "</span>";
+        btn.addEventListener("click", function () { selectTopic(topic, true); });
+        topicsEl.appendChild(btn);
+      });
+
+      btnAnother.addEventListener("click", function () {
+        if (!current) return;
+        current.verse = drawVerse(current.topic);
+        render(current.verse, current.topic, true);
+      });
+
+      var copyTimer = null;
+      function showCopied() {
+        btnCopy.textContent = "Copied \u2713";
+        btnCopy.classList.add("copied");
+        if (copyTimer) clearTimeout(copyTimer);
+        copyTimer = setTimeout(function () {
+          btnCopy.textContent = "Copy verse";
+          btnCopy.classList.remove("copied");
+        }, 1800);
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (ok) showCopied();
+      }
+      btnCopy.addEventListener("click", function () {
+        if (!current) return;
+        var payload = current.verse.text + "\n\u2014 " + current.verse.ref + " (WEB)";
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(payload).then(showCopied, function () { fallbackCopy(payload); });
+        } else {
+          fallbackCopy(payload);
+        }
+      });
+    </script>
+  </body>
+</html>
