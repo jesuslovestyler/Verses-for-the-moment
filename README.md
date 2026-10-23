@@ -1,7 +1,8 @@
 # Verses for the Moment
 
-A verse for the moment — open it and receive a Bible verse for right now, from the World English Bible.
+Verses for the moment: tell the page what you're facing — fear, grief, joy, weariness, gratitude — and receive the verse that speaks to it, from the World English Bible.
 
 **Live:** https://jesuslovestyler.github.io/Verses-for-the-moment/
+**Home:** https://jesuslovestyler.com/
 
-Built with Muse artifacts.
+Scripture is quoted from the World English Bible, a public-domain translation. Released into the public domain (Unlicense — see LICENSE). Built by Tyler with Noki.
